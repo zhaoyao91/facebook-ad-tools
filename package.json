@@ -1,0 +1,12 @@
+{
+  "name": "facebook-ad-tools",
+  "version": "1.0.0",
+  "description": "help play with facebook marketing api",
+  "keywords": ["facebook", "marketing"],
+  "author": "zhaoyao91@gmail.com",
+  "license": "MIT",
+  "repository": "https://github.com/zhaoyao91/facebook-ad-tools",
+  "dependencies": {
+    "url-join": "^4.0.0"
+  }
+}
