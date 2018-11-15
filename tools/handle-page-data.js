@@ -15,10 +15,9 @@ module.exports = async function (nextUrl, handler) {
   const dataDoneSignal = new Signal(true)
   let handleDataError = null
 
+  // wrap the handler to ensure it to be executed asynchronously
   async function handleData (data) {
-    dataDoneSignal.state = false
-    await handler(data)
-    dataDoneSignal.state = true
+    return handler(data)
   }
 
   while (nextUrl) {
@@ -29,9 +28,14 @@ module.exports = async function (nextUrl, handler) {
     await dataDoneSignal.until(true)
     if (handleDataError) throw handleDataError
 
-    handleData(data).catch(err => {
-      handleDataError = err
-    })
+    dataDoneSignal.state = false
+    handleData(data)
+      .catch(err => {
+        handleDataError = err
+      })
+      .finally(() => {
+        dataDoneSignal.state = true
+      })
 
     if (
       page.paging.cursors
