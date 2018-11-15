@@ -2,11 +2,15 @@
   "name": "facebook-ad-tools",
   "version": "1.0.0",
   "description": "help play with facebook marketing api",
-  "keywords": ["facebook", "marketing"],
+  "keywords": [
+    "facebook",
+    "marketing"
+  ],
   "author": "zhaoyao91@gmail.com",
   "license": "MIT",
   "repository": "https://github.com/zhaoyao91/facebook-ad-tools",
   "dependencies": {
+    "axios": "^0.18.0",
     "url-join": "^4.0.0"
   }
 }
