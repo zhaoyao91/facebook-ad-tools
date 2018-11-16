@@ -1,25 +1,29 @@
 const joinUrl = require('url-join')
 
-const buildResourcePath = require('./build-resource-path')
 const buildQueryString = require('./build-querystring')
 const defaultBaseUrl = require('./base-url')
 
+/**
+ * @param options.baseUrl
+ * @param options.apiVersion
+ * @param options.resourcePath
+ * @param options.query
+ * @param options.accessToken
+ * @returns {string} url
+ */
 module.exports = function (options) {
   const {
     baseUrl = defaultBaseUrl,
     apiVersion,
+    resourcePath,
+    query,
     accessToken,
-    objectId,
-    edge,
-    query
   } = options
 
   const queryString = buildQueryString({
     access_token: accessToken,
     ...query,
   })
-
-  const resourcePath = buildResourcePath({objectId, edge})
 
   return joinUrl(baseUrl, apiVersion, resourcePath, '?' + queryString)
 }
