@@ -1,5 +1,6 @@
 const axios = require('axios')
 const Signal = require('await-signal')
+const asAsync = require('as-async')
 
 /**
  * SO COOL!
@@ -9,15 +10,28 @@ const Signal = require('await-signal')
  * this optimization could just save your life
  *
  * @param nextUrl
- * @param handler - async func(pageData)
+ * @param handler - async func(data), data is an array of items
+ *
+ * @return result - {results, hasError, count}, results is an array of which each item is the return value or thrown error of the corresponding page data handling
  */
 module.exports = async function (nextUrl, handler) {
   const dataDoneSignal = new Signal(true)
-  let handleDataError = null
+  const results = []
 
-  // wrap the handler to ensure it to be executed asynchronously
-  async function handleData (data) {
-    return handler(data)
+  function handleResult(result) {
+    results.push(result)
+  }
+
+  function handleData (data) {
+    if (!Array.isArray(data)) {
+      handleResult(new TypeError('data is not an array'))
+      return
+    }
+
+    dataDoneSignal.state = false
+    asAsync.run(handler, data).then(handleResult).catch(handleResult).finally(() => {
+      dataDoneSignal.state = true
+    })
   }
 
   while (nextUrl) {
@@ -26,16 +40,8 @@ module.exports = async function (nextUrl, handler) {
     const data = page.data
 
     await dataDoneSignal.until(true)
-    if (handleDataError) throw handleDataError
 
-    dataDoneSignal.state = false
     handleData(data)
-      .catch(err => {
-        handleDataError = err
-      })
-      .finally(() => {
-        dataDoneSignal.state = true
-      })
 
     if (
       page.paging.cursors
@@ -49,4 +55,10 @@ module.exports = async function (nextUrl, handler) {
   }
 
   await dataDoneSignal.until(true)
+
+  return {
+    results,
+    hasError: results.some(x => x instanceof Error),
+    count: results.length
+  }
 }
