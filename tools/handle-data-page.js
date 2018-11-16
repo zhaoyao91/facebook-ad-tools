@@ -1,6 +1,7 @@
 const axios = require('axios')
 const Signal = require('await-signal')
 const asAsync = require('as-async')
+const isError = require('lodash.iserror')
 
 /**
  * fetch and handle data page by page
@@ -55,6 +56,6 @@ module.exports = async function (nextUrl, handler) {
 
   return {
     results,
-    hasError: results.some(x => x instanceof Error),
+    hasError: results.some(isError),
   }
 }
