@@ -3,16 +3,13 @@ const Signal = require('await-signal')
 const asAsync = require('as-async')
 
 /**
- * SO COOL!
- *
  * fetch and handle data page by page
  * it would prefetch the next page of data while handling the current one
- * this optimization could just save your life
  *
  * @param nextUrl
  * @param handler - async func(data), data is an array of items
  *
- * @return result - {results, hasError, count}, results is an array of which each item is the return value or thrown error of the corresponding page data handling
+ * @return result - {results, hasError}, results is an array of which each item is the return value or thrown error of the corresponding page data handling
  */
 module.exports = async function (nextUrl, handler) {
   const dataDoneSignal = new Signal(true)
@@ -59,6 +56,5 @@ module.exports = async function (nextUrl, handler) {
   return {
     results,
     hasError: results.some(x => x instanceof Error),
-    count: results.length
   }
 }
