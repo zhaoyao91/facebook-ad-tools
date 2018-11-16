@@ -2,10 +2,11 @@ const joinUrl = require('url-join')
 
 const buildResourcePath = require('./build-resource-path')
 const buildQueryString = require('./build-querystring')
-const baseUrl = require('./base-url')
+const defaultBaseUrl = require('./base-url')
 
 module.exports = function (options) {
   const {
+    baseUrl = defaultBaseUrl,
     apiVersion,
     accessToken,
     objectId,
