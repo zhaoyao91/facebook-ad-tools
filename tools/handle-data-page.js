@@ -2,6 +2,7 @@ const axios = require('axios')
 const Signal = require('await-signal')
 const asAsync = require('as-async')
 const isError = require('lodash.iserror')
+const last = require('lodash.last')
 
 /**
  * fetch and handle data page by page
@@ -73,8 +74,4 @@ module.exports = async function ({url, handler, failFast = false, isFailed = isE
     results,
     hasError: results.some(isError),
   }
-}
-
-function last (arr) {
-  return arr[arr.length - 1]
 }
