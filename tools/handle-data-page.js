@@ -7,16 +7,18 @@ const isError = require('lodash.iserror')
  * fetch and handle data page by page
  * it would prefetch the next page of data while handling the current one
  *
- * @param nextUrl
+ * @param url
  * @param handler - async func(data), data is an array of items
+ * @param failFast = false
+ * @param isFailed = isError
  *
  * @return result - {results, hasError}, results is an array of which each item is the return value or thrown error of the corresponding page data handling
  */
-module.exports = async function (nextUrl, handler) {
+module.exports = async function ({url, handler, failFast = false, isFailed = isError}) {
   const dataDoneSignal = new Signal(true)
   const results = []
 
-  function handleResult(result) {
+  function handleResult (result) {
     results.push(result)
   }
 
@@ -32,12 +34,25 @@ module.exports = async function (nextUrl, handler) {
     })
   }
 
-  while (nextUrl) {
-    const response = await axios.get(nextUrl)
-    const page = response.data
-    const data = page.data
+  while (url) {
+    let page
+    let data
+
+    try {
+      const response = await axios.get(url)
+      page = response.data
+      data = page.data
+    } catch (err) {
+      await dataDoneSignal.until(true)
+      handleResult(err)
+      break
+    }
 
     await dataDoneSignal.until(true)
+
+    if (failFast && results.length > 0 && isFailed(last(results))) {
+      break
+    }
 
     handleData(data)
 
@@ -46,9 +61,9 @@ module.exports = async function (nextUrl, handler) {
       && page.paging.cursors.before !== page.paging.cursors.after
       && page.paging.next
     ) {
-      nextUrl = page.paging.next
+      url = page.paging.next
     } else {
-      nextUrl = null
+      url = null
     }
   }
 
@@ -58,4 +73,8 @@ module.exports = async function (nextUrl, handler) {
     results,
     hasError: results.some(isError),
   }
+}
+
+function last (arr) {
+  return arr[arr.length - 1]
 }

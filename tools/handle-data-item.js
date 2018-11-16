@@ -5,14 +5,21 @@ const isError = require('lodash.iserror')
 const handleDataPage = require('./handle-data-page')
 
 /**
- * @param nextUrl
+ * @param url
  * @param handler - async func(data), data is just an item
+ * @param failFast = false
+ * @param isFailed = isError
  *
  * @return result - {results, hasError}, results is an array of value returned or error thrown in each handling of data
  */
-module.exports = async function (nextUrl, handler) {
-  const originalResult = await handleDataPage(nextUrl, data => {
-    return Promise.all(data.map(item => asAsync.run(handler, item).catch(e => e)))
+module.exports = async function ({url, handler, failFast = false, isFailed = isError}) {
+  const originalResult = await handleDataPage({
+    url,
+    handler: data => {
+      return Promise.all(data.map(item => asAsync.run(handler, item).catch(e => e)))
+    },
+    failFast,
+    isFailed: results => isError(results) || results.some(isFailed)
   })
 
   const results = flatten(originalResult.results)
