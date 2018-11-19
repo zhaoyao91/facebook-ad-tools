@@ -58,7 +58,8 @@ module.exports = async function ({url, handler, failFast = false, isFailed = isE
     handleData(data)
 
     if (
-      page.paging.cursors
+      page.paging
+      && page.paging.cursors
       && page.paging.cursors.before !== page.paging.cursors.after
       && page.paging.next
     ) {
