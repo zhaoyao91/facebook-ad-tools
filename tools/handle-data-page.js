@@ -15,7 +15,7 @@ const last = require('lodash.last')
  *
  * @return result - {results, hasError}, results is an array of which each item is the return value or thrown error of the corresponding page data handling
  */
-module.exports = async function ({url, handler, failFast = false, isFailed = isError}) {
+module.exports = async function ({ url, handler, failFast = false, isFailed = isError }) {
   const dataDoneSignal = new Signal(true)
   const results = []
 
@@ -57,12 +57,7 @@ module.exports = async function ({url, handler, failFast = false, isFailed = isE
 
     handleData(data)
 
-    if (
-      page.paging
-      && page.paging.cursors
-      && page.paging.cursors.before !== page.paging.cursors.after
-      && page.paging.next
-    ) {
+    if (page.paging && page.paging.next) {
       url = page.paging.next
     } else {
       url = null
