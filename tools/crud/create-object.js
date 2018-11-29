@@ -1,5 +1,4 @@
-const axios = require('axios')
-
+const request = require('../../lib/request')
 const buildUrl = require('../base/build-url')
 
 module.exports = async function (options) {
@@ -11,7 +10,7 @@ module.exports = async function (options) {
     object,
   } = options
 
-  const result = await axios({
+  const result = await request({
     method: 'POST',
     url: buildUrl({
       accessToken,

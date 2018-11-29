@@ -1,8 +1,9 @@
-const axios = require('axios')
 const Signal = require('await-signal')
 const asAsync = require('as-async')
 const isError = require('lodash.iserror')
 const last = require('lodash.last')
+
+const request = require('../../lib/request')
 
 /**
  * fetch and handle data page by page
@@ -40,7 +41,10 @@ module.exports = async function ({ url, handler, failFast = false, isFailed = is
     let data
 
     try {
-      const response = await axios.get(url)
+      const response = await request({
+        method: 'GET',
+        url
+      })
       page = response.data
       data = page.data
     } catch (err) {
