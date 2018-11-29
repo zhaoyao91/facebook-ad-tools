@@ -1,25 +1,27 @@
 const axios = require('axios')
 
-const buildUrl = require('./base/build-url')
+const buildUrl = require('../base/build-url')
 
 module.exports = async function (options) {
   const {
     accessToken,
     baseUrl,
     apiVersion,
-    resourcePath,
-    object,
+    objectId,
+    fields,
   } = options
 
   const result = await axios({
-    method: 'POST',
+    method: 'GET',
     url: buildUrl({
       accessToken,
       baseUrl,
       apiVersion,
-      resourcePath,
+      resourcePath: objectId,
+      query: {
+        fields: fields.join(',')
+      }
     }),
-    data: object
   })
 
   return result.data

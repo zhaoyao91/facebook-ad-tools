@@ -1,23 +1,25 @@
 const axios = require('axios')
 
-const buildUrl = require('./base/build-url')
+const buildUrl = require('../base/build-url')
 
 module.exports = async function (options) {
   const {
     accessToken,
     baseUrl,
     apiVersion,
-    objectId,
+    resourcePath,
+    object,
   } = options
 
   const result = await axios({
-    method: 'DELETE',
+    method: 'POST',
     url: buildUrl({
       accessToken,
       baseUrl,
       apiVersion,
-      resourcePath: objectId,
-    })
+      resourcePath,
+    }),
+    data: object
   })
 
   return result.data
