@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const buildUrl = require('./build-url')
+const buildUrl = require('./base/build-url')
 
 module.exports = async function (options) {
   const {
