@@ -4,18 +4,20 @@ const buildQueryString = require('./build-querystring')
 const defaultBaseUrl = require('./base-url')
 
 /**
- * @param options.accessToken
- * @param options.baseUrl
- * @param options.apiVersion
- * @param options.resourcePath
- * @param options.query
+ * build a facebook api url from by some params
+ *
+ * @param {string} [options.baseUrl]
+ * @param {string} options.apiVersion
+ * @param {string} options.accessToken
+ * @param {string} options.resourcePath
+ * @param {Object} options.query
  * @returns {string} url
  */
 module.exports = function (options) {
   const {
-    accessToken,
     baseUrl = defaultBaseUrl,
     apiVersion,
+    accessToken,
     resourcePath,
     query,
   } = options

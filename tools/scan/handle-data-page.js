@@ -6,15 +6,16 @@ const last = require('lodash.last')
 const request = require('../../lib/request')
 
 /**
- * fetch and handle data page by page
+ * handle all data pages in a url-chain one by one
  * it would prefetch the next page of data while handling the current one
  *
- * @param url
- * @param handler - async func(data), data is an array of items
- * @param failFast = false
- * @param isFailed = isError
+ * @param {string} url - the leading url
+ * @param {function} handler - async func(data: Array) => any, data is an array of items, the function could return a result or throw an error
  *
- * @return result - {results, hasError}, results is an array of which each item is the return value or thrown error of the corresponding page data handling
+ * @param {boolean} [failFast=false] - Advanced option, if true, the function would return on the first failure, otherwise it would keep running and collect all results
+ * @param {function} [isFailed=isError] - Advanced option, func(result: any) => bool, tell if the result indicates a failure
+ *
+ * @return {Object} result - {results, hasError}, results is an array of value returned or error thrown in each handling of a page of data
  */
 module.exports = async function ({ url, handler, failFast = false, isFailed = isError }) {
   const dataDoneSignal = new Signal(true)

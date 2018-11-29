@@ -1,6 +1,16 @@
 const request = require('../../lib/request')
 const buildUrl = require('../base/build-url')
 
+/**
+ * create an object
+ *
+ * @param {string} [options.baseUrl]
+ * @param {string} options.apiVersion
+ * @param {string} options.accessToken
+ * @param {string} options.resourcePath
+ * @param {Object} options.params
+ * @returns {Object} result
+ */
 module.exports = async function (options) {
   const {
     baseUrl,
