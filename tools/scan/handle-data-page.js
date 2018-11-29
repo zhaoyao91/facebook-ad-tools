@@ -3,7 +3,7 @@ const asAsync = require('as-async')
 const isError = require('lodash.iserror')
 const last = require('lodash.last')
 
-const request = require('../../lib/request')
+const request = require('../base/request')
 
 /**
  * handle all data pages in a url-chain one by one

@@ -1,4 +1,4 @@
-const request = require('../../lib/request')
+const request = require('../base/request')
 const buildUrl = require('../base/build-url')
 
 /**

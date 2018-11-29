@@ -1,6 +1,7 @@
 const axios = require('axios')
 
 /**
+ * proxy http request via axios
  * remove heavy payload on the error
  * only keep the most useful info for debug purpose
  */
