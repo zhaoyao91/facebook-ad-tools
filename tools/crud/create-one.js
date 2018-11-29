@@ -3,11 +3,11 @@ const buildUrl = require('../base/build-url')
 
 module.exports = async function (options) {
   const {
-    accessToken,
     baseUrl,
     apiVersion,
+    accessToken,
     resourcePath,
-    object,
+    params,
   } = options
 
   const result = await request({
@@ -18,7 +18,7 @@ module.exports = async function (options) {
       apiVersion,
       resourcePath,
     }),
-    data: object
+    data: params
   })
 
   return result.data
