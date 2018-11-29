@@ -3,9 +3,9 @@ const buildUrl = require('../base/build-url')
 
 module.exports = async function (options) {
   const {
-    accessToken,
     baseUrl,
     apiVersion,
+    accessToken,
     objectId,
     fields,
   } = options
